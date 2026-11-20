@@ -14,6 +14,16 @@
 - **System TTS Integration**: A/B benchmarking against Android system speech engines (including Marmalade TTS).
 - **Domain Text Normalization**: Built-in rules for biblical citations, theological terms, and Latin patristic phrases.
 - **Hardware-Aware Benchmarks**: Measures model load latency, Time-To-First-Audio (TTFA), Real-Time Factor (RTF), memory PSS footprint, and thermal/drift behavior across thread counts.
+- **House-Style Design System**: Calm, scholarly visual design conforming to the app-family house style with edge-to-edge support, custom dark/light palettes, and responsive typography (see [DESIGN.md](DESIGN.md)).
+- **Adaptive Launcher Icon**: Custom vector icon combining an open liturgical codex with acoustic sound waves on deep navy, supporting Android 13+ themed dynamic icons.
+
+## User Interface & Navigation
+
+Lector implements the app-family navigation standard:
+- **Pinned Modal Navigation Drawer**: Identity header with app wordmark and version, categorized sections (`LISTEN`, `VOICES`, `SYSTEM`, `ABOUT`), and an `Advanced settings` sub-menu with parent-first Back handling.
+- **Listen Screen**: Dedicated listening canvas with pinned top bar, compact text field with prefilled theology passage, current voice pill with quick picker, stepped speed slider with presets (0.75x, 1.0x, 1.25x, 1.5x), and prominent Speak/Stop controls.
+- **First-Run Experience**: Informative welcome card featuring full, unclipped download actions and size indicators when no neural voice is installed.
+- **Dedicated Voices Screen**: Clear distinction between installed and available catalog voices, real-time download progress with cancellation, SAF archive import, and delete confirmation naming freed storage.
 
 ## Adding Voices
 
