@@ -91,7 +91,7 @@ fun MainScreen(
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             val showFirstRun = !uiState.hasInstalledModels || uiState.simulateFirstRun
 
@@ -168,7 +168,7 @@ fun MainScreen(
                             onValueChange = { viewModel.setText(it) },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .heightIn(min = 180.dp, max = 320.dp),
+                                .heightIn(min = 120.dp, max = 200.dp),
                             textStyle = MaterialTheme.typography.bodyLarge.copy(
                                 lineHeight = 24.sp,
                                 color = MaterialTheme.colorScheme.onSurface
@@ -195,7 +195,7 @@ fun MainScreen(
                 ) {
                     Column(
                         modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         // Voice Selector Chip / Pill
                         Row(
