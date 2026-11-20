@@ -19,9 +19,9 @@ This benchmark rigorously evaluates the on-device inference speed, latency, memo
 1. **Speed Champion — Supertonic int8:** Achieves an extraordinary Real-Time Factor (RTF) of **0.121 @ 4 threads** (8.2× faster than real-time) with a cold load time of **1,023 ms**, instantaneous Time-to-First-Audio (TTFA) of **1,329 ms**, and the highest overall pronunciation accuracy (**12/19 terms recognized**, 63.2%).
 2. **Production Voice Default — Piper Ryan High (VITS):** Delivers broadcast-quality, natural US male narration at **RTF 0.704 @ 4 threads** (1.42× faster than real-time), 22.05 kHz audio fidelity, and rock-solid thermal stability (**+2.6% drift over a 10-minute non-stop run**, 98 sentences synthesized).
 3. **Ultra-Lightweight Champion — Kitten nano int8:** Delivers **RTF 0.331** with a tiny **43.5 MB** disk footprint and ~522 MB peak PSS, ideal for memory-constrained devices, though showing minor robotic consonant timbre.
-4. **Naturalness & Prosody Leader — Kokoro multi-lang v1.0 int8:** Possesses the most human-like cadence, warm expressive intonation, and robust phonetic dictionary (scoring up to **10/19 hard words**). However, on the Snapdragon 8 Gen 1 CPU, its RTF ranges from **1.179 to 1.407 @ 4 threads** (slower than real-time), requiring chapter prebuffering or Hexagon NPU offloading for live continuous reading. Over 10 minutes of sustained execution, it maintained a steady RTF ~1.39 with zero thermal degradation.
+4. **Naturalness & Prosody Leader — Kokoro multi-lang v1.0 int8:** Possesses the most human-like cadence, warm expressive intonation, and robust phonetic dictionary (scoring up to **10/19 hard words**). In non-debuggable foreground execution with screen on and charging, Kokoro am_michael achieves **RTF 1.206 @ 4 threads** (and **1.294 @ 2 threads**). However, on the Snapdragon 8 Gen 1 CPU, it remains slower than real-time (RTF > 1.0), requiring sentence prebuffering / synthesize-ahead pipeline for live continuous reading. At 6 threads, RTF regresses to **1.389** due to core topology mismatches (1 Prime + 3 Big cores = 4 performance cores optimal). Over 10 minutes of sustained execution, it maintained a steady RTF ~1.39 with zero thermal degradation.
 5. **Autoregressive Flow-Matching — Pocket TTS int8:** Operates faster than real-time (**RTF 0.675 @ 4 threads**, **0.615 @ 2 threads**) with high pronunciation fidelity (**10/19**), proving the viability of flow-matching neural TTS on mobile CPUs.
-6. **Marmalade System TTS Comparison:** The bundled system TTS provider exhibited extreme latency (TTFA 11.5s, RTF 2.94), generated blank audio during background file synthesis, and has an enormous disk footprint (919 MB).
+6. **Marmalade System TTS Comparison:** The bundled system TTS provider exhibited high latency (TTFA 11.5s, RTF 2.94), synthesized a full 69.9s WAV file (not blank/empty), but Whisper ASR scored 0/19 on theological terms due to phonetic inaudibility on specialized Latin/Greek terminology, with an enormous disk footprint (919 MB).
 
 ---
 
@@ -66,20 +66,22 @@ All benchmarks were executed on the verified physical Samsung Galaxy S22 (`100.8
 
 | Model Candidate | Voice | Disk Size | Cold Load | TTFA (t=4) | RTF @ 2t | RTF @ 4t | Peak PSS | 10m Drift | ASR Score (/19) | Stability & Audio Character |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
-| **Supertonic int8** | `default` | 92.0 MB | 1,023 ms | 1,329 ms | **0.179** | **0.121** | 522.7 MB | — | **12 / 19** (63%) | Instant TTFA, 8.2× real-time speed, clean 44.1kHz audio, highest hard-word score. |
-| **Kitten nano int8** | `default` | 43.5 MB | 2,240 ms | 2,981 ms | **0.342** | **0.331** | 522.7 MB | — | **4 / 19** (21%) | 3× real-time, tiny 43 MB size; slightly robotic consonant articulation. |
+| **Supertonic int8** | `default` | 92.0 MB | 1,023 ms | 1,329 ms | **0.179** | **0.121** | 540.2 MB | — | **12 / 19** (63%) | Instant TTFA, 8.2× real-time speed, clean 44.1kHz audio, highest hard-word score. |
+| **Kitten nano int8** | `default` | 43.5 MB | 2,240 ms | 2,981 ms | **0.342** | **0.331** | 512.6 MB | — | **4 / 19** (21%) | 3× real-time, tiny 43 MB size; slightly robotic consonant articulation. |
 | **Piper lessac-medium** | `lessac` | 77.4 MB | 1,605 ms | 571 ms | **0.322** | **0.241**\* | 545.0 MB | — | **5 / 19** (26%) | 3.1× real-time, crisp female voice, sub-second TTFA; OOV on Greek names. |
 | **Pocket TTS int8** | `bria` | 193.8 MB | 1,590 ms | 5,016 ms | **0.615** | **0.675** | 716.6 MB | — | **10 / 19** (53%) | Flow-matching autoregressive; 1.5× real-time, expressive natural timbre. |
 | **Piper ryan-high** | `ryan` | 132.4 MB | 1,940 ms | 4,800 ms | **1.023** | **0.704** | 704.0 MB | **+2.6%** | **4 / 19** (21%) | High acoustic fidelity, warm authoritative male voice; 1.4× real-time @ 4t. |
+| **Kokoro multi-lang** | `am_michael` (Foreground) | 181.1 MB | 3,060 ms | 10,329 ms | **1.294** | **1.206**\*\*\* | 663.5 MB | — | **10 / 19** (53%) | Natural US male narrator; 1.206 RTF @ 4t in foreground release run. |
 | **Kokoro multi-lang** | `bm_george` | 181.1 MB | 3,240 ms | 10,395 ms | **1.473** | **1.179** | 666.7 MB | — | **10 / 19** (53%) | Distinguished British male narrator; fastest Kokoro voice on SM8450. |
-| **Kokoro multi-lang** | `am_michael` | 181.1 MB | 3,640 ms | 11,231 ms | **1.531** | **1.388** | 704.9 MB | — | **10 / 19** (53%) | Natural US male narrator; high theological word recognition. |
 | **Kokoro multi-lang** | `af_heart` | 181.1 MB | 3,343 ms | 10,686 ms | **1.494** | **1.395** | 657.8 MB | **-21.2%**\*\* | **9 / 19** (47%) | Exceptionally warm, human-like US female voice; slower than real-time. |
 | **Kokoro multi-lang** | `bf_emma` | 181.1 MB | 3,587 ms | 9,802 ms | **1.525** | **1.407** | 668.0 MB | — | **9 / 19** (47%) | Clear British female voice; expressive prosody and punctuation pauses. |
 | **Kokoro en v0.19** | `default` | 150.6 MB | 3,224 ms | 13,194 ms | **1.895** | **1.548** | 651.9 MB | — | **3 / 19** (16%) | Older single-voice Kokoro; slower and lower lexicon coverage than v1.0. |
-| **Marmalade TTS** | `system` | 919.4 MB | 340 ms | 11,508 ms | — | **2.936** | 716.6 MB | — | **0 / 19** (0%) | System service; high latency, synthesizes blank audio to file on Android 16. |
+| **Marmalade TTS** | `system` | 919.4 MB | 340 ms | 11,508 ms | — | **2.936** | 716.6 MB | — | **0 / 19** (0%) | System service; full 69.9s WAV generated; phonetically inaudible on Greek/Latin terms. |
 
 *\*Note on Piper lessac-medium @ 4t: Initial single-matrix run experienced Android 16 cgroup freezing before `FLAG_KEEP_SCREEN_ON` was enforced. Clean sustained measurement confirms RTF ~0.24.*  
-*\*\*Note on Kokoro af_heart drift: Represents cold-start warmup (1.77 RTF in minute 1 down to 1.39 RTF in minute 10).*
+*\*\*Note on Kokoro af_heart drift: Represents cold-start warmup (1.77 RTF in minute 1 down to 1.39 RTF in minute 10).*  
+*\*\*\*Note on Kokoro am_michael Foreground Diagnostics: Re-measured in release build (debuggable=false), screen on, device charging. Thread scaling: t=2 RTF 1.294 (PSS 607.8 MB, TTFA 13.3s), t=4 RTF 1.206 (PSS 663.5 MB, TTFA 10.3s), t=6 RTF 1.389 (PSS 658.3 MB, TTFA 9.6s). 4 threads is the optimal topology operating across Snapdragon 8 Gen 1's 1 Cortex-X2 + 3 Cortex-A710 performance cores; 6 threads regresses due to little-core barrier sync and thermal throttling.*  
+*\*\*\*\*Note on PSS measurement: Fixed earlier identical 522.7 MB values by querying live `Debug.getMemoryInfo()` during active synthesis instead of stale `ActivityManager.getProcessMemoryInfo()`.*
 
 ---
 

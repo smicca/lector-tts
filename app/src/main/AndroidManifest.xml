@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <!-- Allow querying system TTS engines such as Marmalade -->
     <queries>
         <package android:name="app.marmalade.tts" />
@@ -13,17 +18,46 @@
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.DeviceDefault">
+        android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
 
+        <!-- Main User Interface Activity (Jetpack Compose) -->
         <activity
-            android:name=".BenchmarkActivity"
+            android:name=".ui.MainActivity"
             android:exported="true"
-            android:configChanges="orientation|screenSize">
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Benchmark Activity (Debug-only, launched via adb/am start) -->
+        <activity
+            android:name=".BenchmarkActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize" />
+
+        <!-- Android System Text-to-Speech Engine Service -->
+        <service
+            android:name=".core.service.LectorTtsService"
+            android:exported="true"
+            android:label="@string/tts_service_label">
+            <intent-filter>
+                <action android:name="android.intent.action.TTS_SERVICE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.speech.tts"
+                android:resource="@xml/tts_engine" />
+        </service>
+
+        <!-- Model Download Background Service -->
+        <service
+            android:name=".core.service.ModelDownloadService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
     </application>
 
 </manifest>

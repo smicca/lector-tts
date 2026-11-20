@@ -1,0 +1,121 @@
+[
+  {
+    "id": "kokoro-int8-multi-lang-v1_0",
+    "name": "Kokoro multi-lang v1.0",
+    "description": "Natural US & UK neural narration with rich prosody",
+    "recommended": true,
+    "archiveName": "kokoro-int8-multi-lang-v1_0.tar.bz2",
+    "folderName": "kokoro-int8-multi-lang-v1_0",
+    "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/kokoro-int8-multi-lang-v1_0.tar.bz2",
+    "sha256": "72c347230107ef8a31098ec4d468a605244beef5f1ed00db97efa13518800653",
+    "archiveSizeBytes": 132353410,
+    "installedSizeBytes": 190000000,
+    "modelType": "KOKORO",
+    "qualityBadge": "Top Naturalness",
+    "speedBadge": "1.2x RTF (buffered)",
+    "defaultVoiceId": "en-us-michael",
+    "voices": [
+      { "id": "en-us-michael", "name": "American Male (Michael)", "speakerId": 16, "locale": "en-US", "isDefault": true },
+      { "id": "en-us-heart", "name": "American Female (Heart)", "speakerId": 3, "locale": "en-US", "isDefault": false },
+      { "id": "en-gb-george", "name": "British Male (George)", "speakerId": 26, "locale": "en-GB", "isDefault": false },
+      { "id": "en-gb-emma", "name": "British Female (Emma)", "speakerId": 21, "locale": "en-GB", "isDefault": false },
+      { "id": "en-us-nicole", "name": "American Female (Nicole)", "speakerId": 0, "locale": "en-US", "isDefault": false },
+      { "id": "en-us-adam", "name": "American Male (Adam)", "speakerId": 15, "locale": "en-US", "isDefault": false }
+    ]
+  },
+  {
+    "id": "sherpa-onnx-supertonic-tts-int8-2026-03-06",
+    "name": "Supertonic int8",
+    "description": "Ultra-fast acoustic decoder with 44.1 kHz fidelity",
+    "recommended": false,
+    "archiveName": "sherpa-onnx-supertonic-tts-int8-2026-03-06.tar.bz2",
+    "folderName": "sherpa-onnx-supertonic-tts-int8-2026-03-06",
+    "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/sherpa-onnx-supertonic-tts-int8-2026-03-06.tar.bz2",
+    "sha256": "8c74359f63edd5045d47747f65331f0f6dbcbc91d7e898dd756d631295fe3259",
+    "archiveSizeBytes": 84692981,
+    "installedSizeBytes": 96000000,
+    "modelType": "SUPERTONIC",
+    "qualityBadge": "8.2x Real-Time",
+    "speedBadge": "0.12 RTF",
+    "defaultVoiceId": "en-us-supertonic",
+    "voices": [
+      { "id": "en-us-supertonic", "name": "Supertonic Voice", "speakerId": 0, "locale": "en-US", "isDefault": true }
+    ]
+  },
+  {
+    "id": "sherpa-onnx-pocket-tts-int8-2026-01-26",
+    "name": "Pocket TTS int8",
+    "description": "Autoregressive flow-matching neural voice",
+    "recommended": false,
+    "archiveName": "sherpa-onnx-pocket-tts-int8-2026-01-26.tar.bz2",
+    "folderName": "sherpa-onnx-pocket-tts-int8-2026-01-26",
+    "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/sherpa-onnx-pocket-tts-int8-2026-01-26.tar.bz2",
+    "sha256": "2f3b88823cbbb9bf0b2477ec8ae7b3fec417b3a87b6bb5f256dba66f2ad967cb",
+    "archiveSizeBytes": 98336520,
+    "installedSizeBytes": 203000000,
+    "modelType": "POCKET",
+    "qualityBadge": "Flow-Matching",
+    "speedBadge": "0.68 RTF",
+    "defaultVoiceId": "en-us-bria",
+    "voices": [
+      { "id": "en-us-bria", "name": "Bria", "speakerId": 0, "locale": "en-US", "isDefault": true }
+    ]
+  },
+  {
+    "id": "vits-piper-en_US-ryan-high",
+    "name": "Piper Ryan High (VITS)",
+    "description": "Warm, broadcast-quality US male narrator",
+    "recommended": false,
+    "archiveName": "vits-piper-en_US-ryan-high.tar.bz2",
+    "folderName": "vits-piper-en_US-ryan-high",
+    "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-piper-en_US-ryan-high.tar.bz2",
+    "sha256": "6a71edf4d308b9cb2eaeadc8d1f3c6bf96120ecb7fe52c29a2b6e139c59760ed",
+    "archiveSizeBytes": 115630708,
+    "installedSizeBytes": 139000000,
+    "modelType": "PIPER_VITS",
+    "qualityBadge": "Broadcast Clear",
+    "speedBadge": "0.70 RTF",
+    "defaultVoiceId": "en-us-ryan",
+    "voices": [
+      { "id": "en-us-ryan", "name": "Ryan (High)", "speakerId": 0, "locale": "en-US", "isDefault": true }
+    ]
+  },
+  {
+    "id": "vits-piper-en_US-lessac-medium",
+    "name": "Piper Lessac Medium (VITS)",
+    "description": "Crisp, lightweight US female narration",
+    "recommended": false,
+    "archiveName": "vits-piper-en_US-lessac-medium.tar.bz2",
+    "folderName": "vits-piper-en_US-lessac-medium",
+    "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-piper-en_US-lessac-medium.tar.bz2",
+    "sha256": "9e3febfacf0abf4270172d2958bcec246032b7e88efc2720840cc80c93de334e",
+    "archiveSizeBytes": 67230653,
+    "installedSizeBytes": 81000000,
+    "modelType": "PIPER_VITS",
+    "qualityBadge": "Instant TTFA",
+    "speedBadge": "0.24 RTF",
+    "defaultVoiceId": "en-us-lessac",
+    "voices": [
+      { "id": "en-us-lessac", "name": "Lessac (Medium)", "speakerId": 0, "locale": "en-US", "isDefault": true }
+    ]
+  },
+  {
+    "id": "kitten-nano-en-v0_8-int8",
+    "name": "Kitten nano int8",
+    "description": "Ultra-compact neural model for minimal storage",
+    "recommended": false,
+    "archiveName": "kitten-nano-en-v0_8-int8.tar.bz2",
+    "folderName": "kitten-nano-en-v0_8-int8",
+    "downloadUrl": "https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/kitten-nano-en-v0_8-int8.tar.bz2",
+    "sha256": "6fa5be852612ce761094ba74ee6123b4fc4acfefa79bf64dc63acae4a83af2fd",
+    "archiveSizeBytes": 31220690,
+    "installedSizeBytes": 45000000,
+    "modelType": "KITTEN",
+    "qualityBadge": "Ultra Compact",
+    "speedBadge": "0.33 RTF",
+    "defaultVoiceId": "en-us-kitten",
+    "voices": [
+      { "id": "en-us-kitten", "name": "Kitten Default", "speakerId": 0, "locale": "en-US", "isDefault": true }
+    ]
+  }
+]

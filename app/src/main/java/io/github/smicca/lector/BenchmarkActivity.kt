@@ -58,7 +58,14 @@ class BenchmarkActivity : Activity() {
     }
 
     private suspend fun runBenchmarks(mode: String, targetModel: String?, sustainedMinutes: Int) {
-        val modelsDir = File(getExternalFilesDir(null), "models")
+        val candidates = listOf(
+            File(filesDir, "models"),
+            File(getExternalFilesDir(null), "models"),
+            File("/sdcard/Android/data/io.github.smicca.lector/files/models"),
+            File("/sdcard/Android/data/io.github.smicca.lector.debug/files/models")
+        )
+        val modelsDir = candidates.firstOrNull { it.exists() && it.listFiles()?.isNotEmpty() == true }
+            ?: candidates.first()
         val outputDir = File(getExternalFilesDir(null), "bench-results")
         outputDir.mkdirs()
 
@@ -119,10 +126,74 @@ class BenchmarkActivity : Activity() {
             candidateModels
         }
 
+        if (mode == "tts_service_test") {
+            appendStatus("\n--- TESTING LECTOR SYSTEM TTS ENGINE SERVICE ---")
+            val ttsDeferred = CompletableDeferred<Boolean>()
+            var ttsClient: android.speech.tts.TextToSpeech? = null
+            try {
+                ttsClient = android.speech.tts.TextToSpeech(this, { status ->
+                    ttsDeferred.complete(status == android.speech.tts.TextToSpeech.SUCCESS)
+                }, packageName)
+
+                val ready = ttsDeferred.await()
+                appendStatus("TextToSpeech init status: $ready")
+
+                val engines = ttsClient.engines
+                val foundLector = engines.any { it.name == packageName }
+                appendStatus("Available engines count: ${engines.size}, contains Lector: $foundLector")
+                for (eng in engines) {
+                    appendStatus(" - ${eng.name} (${eng.label})")
+                }
+
+                if (ready) {
+                    val uttDeferred = CompletableDeferred<Boolean>()
+                    val testWav = File(outputDir, "lector_system_service_test.wav")
+                    if (testWav.exists()) testWav.delete()
+
+                    ttsClient.setOnUtteranceProgressListener(object : android.speech.tts.UtteranceProgressListener() {
+                        override fun onStart(utteranceId: String?) {
+                            Log.i(TAG, "Lector TTS Service onStart: $utteranceId")
+                        }
+                        override fun onDone(utteranceId: String?) {
+                            Log.i(TAG, "Lector TTS Service onDone: $utteranceId")
+                            uttDeferred.complete(true)
+                        }
+                        override fun onError(utteranceId: String?) {
+                            Log.e(TAG, "Lector TTS Service onError: $utteranceId")
+                            uttDeferred.complete(false)
+                        }
+                    })
+
+                    val testPhrase = "In the beginning was the Word, and the Word was with God, and the Word was God."
+                    appendStatus("Synthesizing test phrase through Lector TextToSpeechService...")
+                    val res = ttsClient.synthesizeToFile(testPhrase, Bundle(), testWav, "system_test_1")
+                    appendStatus("synthesizeToFile returned code: $res")
+
+                    val uttSuccess = withTimeoutOrNull(30_000) { uttDeferred.await() } ?: false
+                    appendStatus("Utterance completion: $uttSuccess, WAV size: ${testWav.length()} bytes")
+                    if (uttSuccess && testWav.length() > 44) {
+                        appendStatus("SUCCESS: Lector TextToSpeechService synthesized verified 16-bit PCM audio!")
+                    } else {
+                        appendStatus("FAILURE: Synthesis did not produce valid audio")
+                    }
+                }
+            } finally {
+                ttsClient?.shutdown()
+            }
+            File(outputDir, "BENCHMARK_DONE.txt").writeText("DONE\n${Date()}\n")
+            return
+        }
+
         if (mode == "all" || mode == "matrix") {
             appendStatus("\n--- STARTING TTS MATRIX BENCHMARKS ---")
             for (modelDef in modelsToRun) {
-                val threadCounts = if (modelDef.type == ModelType.MARMALADE) listOf(1) else listOf(2, 4)
+                val threadCounts = if (modelDef.type == ModelType.MARMALADE) {
+                    listOf(1)
+                } else if (modelDef.type == ModelType.KOKORO) {
+                    listOf(2, 4, 6)
+                } else {
+                    listOf(2, 4)
+                }
                 for (threads in threadCounts) {
                     appendStatus("\n[Benchmarking] ${modelDef.name} (threads=$threads)...")
                     val entry = runner.runModelBenchmark(

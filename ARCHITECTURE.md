@@ -28,18 +28,35 @@ Lector provides a benchmark harness and modular on-device neural Text-to-Speech 
 ```
 lector-tts/
 ├── app/
-│   ├── build.gradle.kts           # JNI packaging (arm64-v8a), assets, dependencies
+│   ├── build.gradle.kts           # JNI packaging (arm64-v8a), Jetpack Compose, dependencies
 │   └── src/main/
-│       ├── AndroidManifest.xml    # App manifest, permissions, BenchmarkActivity
-│       └── java/io/github/smicca/lector/
-│           ├── BenchmarkActivity.kt # Benchmark execution coordinator & results logger
-│           ├── SpeechNormalizer.kt  # Text preprocessing and citation expansion
-│           ├── TtsBenchmarkRunner.kt# Core benchmarking harness measuring timing & memory
-│           └── audio/
-│               └── WavWriter.kt     # PCM to WAV audio writer
+│       ├── AndroidManifest.xml    # App manifest, MainActivity, LectorTtsService, ModelDownloadService
+│       ├── assets/
+│       │   └── voices_catalog.json# Catalog definition with pinned SHA-256 hashes
+│       ├── java/io/github/smicca/lector/
+│       │   ├── BenchmarkActivity.kt # Benchmark coordinator (adb/am start debug only)
+│       │   ├── SpeechNormalizer.kt  # Text preprocessing and citation expansion
+│       │   ├── TtsBenchmarkRunner.kt# Core benchmarking harness
+│       │   ├── core/
+│       │   │   ├── engine/LectorTtsEngine.kt    # In-process OfflineTts holder & synthesize-ahead pipeline
+│       │   │   ├── model/VoiceModel.kt          # Domain model definitions & catalog parser
+│       │   │   ├── service/LectorTtsService.kt  # Android TextToSpeechService implementation
+│       │   │   ├── service/ModelDownloadService.kt # Foreground service with progress notification
+│       │   │   ├── storage/ModelStorage.kt      # Archive extraction, SHA-256 validation, SAF import
+│       │   │   └── text/TtsTextSplitter.kt      # Clause and sentence splitting logic
+│       │   ├── feature/
+│       │   │   ├── main/presentation/          # Main reading screen & speech controls
+│       │   │   └── voices/                     # Voice catalog, model management, download UI
+│       │   └── ui/
+│       │       └── MainActivity.kt             # Compose launcher activity
+│       └── res/
+│           ├── values/strings.xml
+│           └── xml/tts_engine.xml             # Android TextToSpeechService metadata
 ├── docs/research/
 │   ├── benchmarks.md              # Measured results, hardware specs, and ranked recommendations
+│   ├── prototype-1-report.md      # Prototype 1 verification and hardware report
 │   └── bench-results/             # Benchmark JSON results and compressed audio samples
+└── docs/screenshots/              # Verification screenshots (first run, voices, main)
 ```
 
 ### 3. Inference Engine Integration

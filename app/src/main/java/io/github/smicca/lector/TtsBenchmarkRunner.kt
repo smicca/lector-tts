@@ -117,10 +117,9 @@ class TtsBenchmarkRunner(
 
     fun getPeakPssMb(): Double {
         return try {
-            val am = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-            val pids = intArrayOf(android.os.Process.myPid())
-            val memInfo = am.getProcessMemoryInfo(pids)
-            if (memInfo.isNotEmpty()) memInfo[0].totalPss / 1024.0 else 0.0
+            val memInfo = android.os.Debug.MemoryInfo()
+            android.os.Debug.getMemoryInfo(memInfo)
+            memInfo.totalPss / 1024.0
         } catch (e: Exception) {
             0.0
         }
@@ -169,6 +168,7 @@ class TtsBenchmarkRunner(
             var ttfaMs = 0L
             var totalSynthMs = 0L
             var totalSamples = 0L
+            var peakPss = getPeakPssMb()
 
             val sampleWavFile = File(outputDir, "${modelId}_t${threads}_sample.wav")
             val audioAccumulator = ArrayList<FloatArray>()
@@ -188,6 +188,9 @@ class TtsBenchmarkRunner(
                     tts.generate(sentence, sid = sid, speed = 1.0f)
                 }
                 val sElapsed = SystemClock.elapsedRealtime() - sStart
+
+                val curPss = getPeakPssMb()
+                if (curPss > peakPss) peakPss = curPss
 
                 if (index == 0) {
                     ttfaMs = sElapsed
@@ -216,7 +219,6 @@ class TtsBenchmarkRunner(
 
             val totalDurationSec = totalSamples.toDouble() / sampleRate
             val rtf = if (totalDurationSec > 0) (totalSynthMs / 1000.0) / totalDurationSec else 0.0
-            val peakPss = getPeakPssMb()
             val tempEnd = getBatteryTemp()
             val thermal = getThermalStatus()
 
