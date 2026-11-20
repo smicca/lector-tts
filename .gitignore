@@ -1,0 +1,23 @@
+*.iml
+.gradle
+/local.properties
+/.idea/
+.DS_Store
+Thumbs.db
+.vscode/
+build/
+*/build/
+captures/
+.externalNativeBuild
+.cxx
+*.apk
+*.aab
+*.jks
+*.keystore
+*.log
+.worktrees/
+.cache/
+scratch/
+# Local uncompressed audio generated during benchmarks
+docs/research/bench-results/local/
+*.wav
