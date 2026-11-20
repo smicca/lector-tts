@@ -226,5 +226,12 @@ class ModelDownloadService : Service() {
                 context.startService(intent)
             }
         }
+
+        fun cancelDownload(context: Context) {
+            try {
+                context.stopService(Intent(context, ModelDownloadService::class.java))
+            } catch (_: Exception) {}
+            _downloadState.value = DownloadState.Idle
+        }
     }
 }

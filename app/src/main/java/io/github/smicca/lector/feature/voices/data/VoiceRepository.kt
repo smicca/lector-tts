@@ -38,6 +38,10 @@ class VoiceRepository(private val context: Context) {
         ModelDownloadService.startDownload(context, modelId)
     }
 
+    fun cancelDownload() {
+        ModelDownloadService.cancelDownload(context)
+    }
+
     fun deleteModel(folderName: String): Boolean {
         val success = ModelStorage.deleteModel(context, folderName)
         if (success) {

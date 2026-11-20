@@ -18,11 +18,13 @@ import kotlinx.coroutines.launch
 data class MainUiState(
     val text: String = TestPassage.RAW_TEXT,
     val isSpeaking: Boolean = false,
+    val isPreparing: Boolean = false,
     val selectedModel: InstalledModel? = null,
     val selectedVoice: VoiceOption? = null,
     val availableVoices: List<VoiceOption> = emptyList(),
     val speed: Float = 1.0f,
     val hasInstalledModels: Boolean = false,
+    val simulateFirstRun: Boolean = false,
     val statusMessage: String? = null
 )
 
@@ -95,22 +97,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         viewModelScope.launch(Dispatchers.IO) {
+            _uiState.update { it.copy(isPreparing = true, statusMessage = "Preparing voice...") }
             engine.ensureModelLoaded(model, numThreads = 4)
             val speakerId = state.selectedVoice?.speakerId ?: 16
 
-            _uiState.update { it.copy(isSpeaking = true, statusMessage = null) }
             engine.playText(
                 text = state.text,
                 speakerId = speakerId,
                 speed = state.speed,
                 onStart = {
-                    _uiState.update { it.copy(isSpeaking = true) }
+                    _uiState.update { it.copy(isPreparing = false, isSpeaking = true, statusMessage = null) }
                 },
                 onFinished = {
-                    _uiState.update { it.copy(isSpeaking = false) }
+                    _uiState.update { it.copy(isPreparing = false, isSpeaking = false) }
                 },
                 onError = { err ->
-                    _uiState.update { it.copy(isSpeaking = false, statusMessage = "Error: ${err.message}") }
+                    _uiState.update { it.copy(isPreparing = false, isSpeaking = false, statusMessage = "Error: ${err.message}") }
                 }
             )
         }
@@ -118,7 +120,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun stop() {
         engine.stop()
-        _uiState.update { it.copy(isSpeaking = false) }
+        _uiState.update { it.copy(isPreparing = false, isSpeaking = false) }
+    }
+
+    fun setSimulateFirstRun(simulate: Boolean) {
+        _uiState.update { it.copy(simulateFirstRun = simulate) }
+    }
+
+    fun resetSampleText() {
+        setText(TestPassage.RAW_TEXT)
     }
 
     fun downloadFirstVoice() {

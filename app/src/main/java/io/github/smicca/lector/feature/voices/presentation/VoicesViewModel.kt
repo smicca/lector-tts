@@ -77,6 +77,10 @@ class VoicesViewModel(application: Application) : AndroidViewModel(application) 
         repository.startDownload(modelId)
     }
 
+    fun cancelDownload() {
+        repository.cancelDownload()
+    }
+
     fun deleteModel(folderName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteModel(folderName)

@@ -1,0 +1,54 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Open Book Pages (White) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,56 C45,53 37,55 30,52 C29,52 28,53 28,54 L28,71 C28,72 29,73 30,73 C37,76 45,74 54,76 C63,74 71,76 78,73 C79,73 80,72 80,71 L80,54 C80,53 79,52 78,52 C71,55 63,53 54,56 Z" />
+    <!-- Book Spine -->
+    <path
+        android:strokeColor="#E2E8F0"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M54,56 L54,76" />
+    <!-- Page Lines Left -->
+    <path
+        android:strokeColor="#CBD5E1"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M34,61 C39,62 44,61 49,62" />
+    <path
+        android:strokeColor="#CBD5E1"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M34,67 C39,68 44,67 49,68" />
+    <!-- Page Lines Right -->
+    <path
+        android:strokeColor="#CBD5E1"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M59,62 C64,61 69,62 74,61" />
+    <path
+        android:strokeColor="#CBD5E1"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M59,68 C64,67 69,68 74,67" />
+    <!-- Sound Waves (White Monochrome) -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:pathData="M47,47 C49,43 59,43 61,47" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:pathData="M41,40 C45,33 63,33 67,40" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:pathData="M35,33 C41,23 67,23 73,33" />
+</vector>
